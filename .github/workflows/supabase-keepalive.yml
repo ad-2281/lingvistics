@@ -1,0 +1,36 @@
+name: Supabase Database Keepalive
+
+on:
+  schedule:
+    # Runs every 5 days at 06:00 UTC so free-tier PostgreSQL never pauses from inactivity
+    - cron: '0 6 */5 * *'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    name: Ping Supabase Database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "Error: SUPABASE_URL or SUPABASE_ANON_KEY secret is missing."
+            exit 1
+          fi
+
+          echo "Sending keepalive query to Supabase..."
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/app_config?select=id")
+
+          echo "HTTP Status Response: ${STATUS_CODE}"
+
+          if [ "$STATUS_CODE" -ge 200 ] && [ "$STATUS_CODE" -lt 300 ]; then
+            echo "Success: Database active and responding."
+          else
+            echo "Warning: Received HTTP ${STATUS_CODE} from Supabase REST endpoint."
+          fi

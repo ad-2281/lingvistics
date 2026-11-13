@@ -1,0 +1,26 @@
+{
+  "name": "lingvistics-course-platform",
+  "version": "1.0.0",
+  "description": "Modular Course Platform with HTML Lesson Ingestion, Strict Teacher Content Isolation, and Server-Side Grading",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve public -l 3000",
+    "dev": "npx serve public -l 3000",
+    "ingest": "python scripts/ingest_content.py",
+    "test:ingest": "python scripts/ingest_content.py --dry-run",
+    "db:push": "supabase db push",
+    "db:reset": "supabase db reset"
+  },
+  "keywords": [
+    "education",
+    "linguistics",
+    "supabase",
+    "grading",
+    "elearning"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

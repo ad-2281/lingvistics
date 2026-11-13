@@ -1,0 +1,60 @@
+{
+  "lesson_slug": "modulul-01-lectia-01",
+  "lesson_title": "Lecția 1: Morfologie și Perechi Minimale",
+  "order_index": 1,
+  "is_published": true,
+  "exercises": [
+    {
+      "slug": "modulul-01-lectia-01-tema",
+      "title": "Temă: Analiza Morfologică",
+      "category": "homework",
+      "source_file": "homework.html",
+      "allow_retakes": false,
+      "max_attempts": 1,
+      "max_score": 100,
+      "fields": {
+        "q1_traducere_1": {
+          "type": "exact_normalized",
+          "accepted": [
+            "otuz ada"
+          ],
+          "points": 20,
+          "hint": "Substantivul după numeral rămâne la forma de singular."
+        },
+        "q1_transcriere_armeana": {
+          "type": "levenshtein_tolerance",
+          "target": "Ռալուկա",
+          "full_points": 20,
+          "one_error_points": 10,
+          "hint": "Verifică segmentele din alfabet."
+        },
+        "q1_spectrograma": {
+          "type": "regex",
+          "pattern": "^a(ce|țe)$",
+          "points": 20,
+          "hint": "Caută o consoană africată între două vocale."
+        },
+        "q1_explicatie": {
+          "type": "keyword_rubric",
+          "points": 40,
+          "keyword_groups": [
+            {
+              "any_of": [
+                "-lar",
+                "plural"
+              ],
+              "points": 20
+            },
+            {
+              "any_of": [
+                "singular",
+                "numeral"
+              ],
+              "points": 20
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

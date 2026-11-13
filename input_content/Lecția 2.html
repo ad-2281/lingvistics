@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OLR „Solomon Marcus” — Suport Predare: Morfologie Non-Liniară & Structura Verbului</title>
+  <style>
+    :root {
+      --c-root: #2563EB;
+      --c-root-bg: #EFF6FF;
+      --c-pref: #DC2626;
+      --c-pref-bg: #FEF2F2;
+      --c-suff: #16A34A;
+      --c-suff-bg: #F0FDF4;
+      --c-infix: #D97706;
+      --c-infix-bg: #FFFBEB;
+      --c-part: #9333EA;
+      --c-part-bg: #FAF5FF;
+
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --border-color: #E2E8F0;
+      --accent-navy: #1E293B;
+      --teacher-bg: #FEF3C7;
+      --teacher-border: #F59E0B;
+      --teacher-text: #92400E;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--accent-navy);
+      color: #FFFFFF;
+      padding: 12px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .brand-title h1 {
+      font-size: 1.12rem;
+      font-weight: 700;
+    }
+
+    .brand-title span {
+      font-size: 0.8rem;
+      color: #94A3B8;
+    }
+
+    .top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .view-switcher {
+      display: flex;
+      background: #0F172A;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+
+    .view-btn {
+      background: transparent;
+      color: #CBD5E1;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      background: var(--c-root);
+      color: #FFFFFF;
+    }
+
+    .mode-toggle-btn {
+      background: #F59E0B;
+      color: #0F172A;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-toggle-btn.student-mode {
+      background: #334155;
+      color: #F8FAFC;
+    }
+
+    .legend-bar {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.85rem;
+      position: sticky;
+      top: 62px;
+      z-index: 990;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .m-root {
+      color: var(--c-root);
+      background: var(--c-root-bg);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .m-pref {
+      color: var(--c-pref);
+      background: var(--c-pref-bg);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .m-suff {
+      color: var(--c-suff);
+      background: var(--c-suff-bg);
+      border: 1px solid rgba(22, 163, 74, 0.3);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .m-infix {
+      color: var(--c-infix);
+      background: var(--c-infix-bg);
+      border: 1px solid rgba(217, 119, 6, 0.35);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .m-part {
+      color: var(--c-part);
+      background: var(--c-part-bg);
+      border: 1px solid rgba(147, 51, 234, 0.3);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    .math-var {
+      font-family: 'Cambria Math', 'Georgia', serif;
+      font-weight: 700;
+      font-style: italic;
+    }
+    .math-var sub {
+      font-style: normal;
+      font-size: 0.75em;
+    }
+    .arrow-labeled {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 8px;
+      line-height: 1.1;
+    }
+    .arrow-labeled .arr-text {
+      font-size: 0.72rem;
+      font-family: system-ui, sans-serif;
+      font-weight: 700;
+      color: var(--c-infix);
+      background: var(--c-infix-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      margin-bottom: 2px;
+      white-space: nowrap;
+    }
+    .arrow-labeled .arr-sym {
+      font-size: 1.3rem;
+      color: var(--accent-navy);
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 1220px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+
+    .stage-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .stage-tab {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .stage-tab.active {
+      border-color: var(--c-root);
+      background: var(--c-root-bg);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+    }
+
+    .stage-tab .st-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--c-root);
+      display: block;
+    }
+
+    .stage-tab .st-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stage-tab .st-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #F1F5F9;
+    }
+
+    .card-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--accent-navy);
+    }
+
+    .badge-level {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #E2E8F0;
+      color: #1E293B;
+    }
+
+    .enunt-box, .section-enunt {
+      background: #F8FAFC;
+      border: 2px solid #CBD5E1;
+      border-left: 6px solid #1E293B;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+    }
+
+    .enunt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .enunt-tag, .sec-tag {
+      background: #1E293B;
+      color: #FFFFFF;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: inline-block;
+    }
+
+    .sec-tag.cerinte { background: var(--c-root); margin-bottom: 10px; }
+    .sec-tag.formular { background: var(--c-suff); margin-bottom: 10px; }
+
+    .cerinte-box, .section-cerinte {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-left: 6px solid var(--c-root);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
+
+    .cerinte-box h4 {
+      color: #1E40AF;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .section-formular {
+      background: #FFFFFF;
+      border: 2px solid #A7F3D0;
+      border-left: 6px solid var(--c-suff);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+
+    .rezolvare-box {
+      background: #FFFFFF;
+      border: 2px dashed #16A34A;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-top: 16px;
+    }
+
+    .rezolvare-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #DCFCE7;
+    }
+
+    .rezolvare-tag {
+      background: #16A34A;
+      color: #FFFFFF;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .teacher-only {
+      background: var(--teacher-bg);
+      border-left: 5px solid var(--teacher-border);
+      color: var(--teacher-text);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.92rem;
+    }
+
+    body.is-student .teacher-only {
+      display: none !important;
+    }
+
+    .teacher-only h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .teacher-only ul {
+      padding-left: 20px;
+      margin-top: 6px;
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 10px 16px;
+      border-radius: 10px;
+    }
+
+    .timer-display {
+      font-family: 'Consolas', monospace;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #38BDF8;
+      min-width: 72px;
+    }
+
+    .timer-btn {
+      background: #334155;
+      color: #FFFFFF;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .timer-btn.start {
+      background: #2563EB;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.91rem;
+      background: #FFFFFF;
+    }
+
+    .data-table th, .data-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: #F1F5F9;
+      font-weight: 700;
+      color: var(--accent-navy);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .formula-card {
+      background: #F8FAFC;
+      border: 2px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .formula-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .formula-math {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: #FFFFFF;
+      padding: 14px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .stepper-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .step-btn {
+      padding: 8px 14px;
+      border: 2px solid var(--border-color);
+      background: #FFFFFF;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .step-btn.active {
+      background: var(--c-root);
+      color: #FFFFFF;
+      border-color: var(--c-root);
+    }
+
+    .step-explanation {
+      background: #F1F5F9;
+      border-left: 4px solid var(--c-root);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .slot-chip {
+      display: inline-block;
+      background: #1E293B;
+      color: #F8FAFC;
+      font-family: 'Consolas', monospace;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      border: 2px dashed #64748B;
+      font-size: 0.86rem;
+    }
+
+    .slot-chip.revealed {
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: var(--text-main);
+    }
+
+    .matrix-cell {
+      cursor: pointer;
+      font-family: 'Consolas', monospace;
+      font-weight: 700;
+      text-align: center !important;
+    }
+
+    .matrix-cell:hover {
+      background: #E0F2FE !important;
+    }
+
+    .matrix-cell.selected {
+      background: #DBEAFE !important;
+      outline: 2px solid var(--c-root);
+    }
+
+    .error-spot {
+      background: #FEE2E2;
+      color: #991B1B;
+      border-bottom: 2px wavy #DC2626;
+      padding: 1px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .good-spot {
+      background: #DCFCE7;
+      color: #166534;
+      border-bottom: 2px solid #16A34A;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    details.optional-card {
+      background: #FFFFFF;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    details.optional-card summary {
+      padding: 14px 18px;
+      background: #F8FAFC;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      list-style: none;
+    }
+
+    .optional-body {
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-action {
+      background: var(--c-root);
+      color: #FFFFFF;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-action.green {
+      background: #16A34A;
+    }
+
+    .btn-secondary {
+      background: #E2E8F0;
+      color: #0F172A;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .hw-input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 2px solid #CBD5E1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: 'Consolas', monospace;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .hw-input.correct {
+      border-color: var(--c-suff);
+      background: var(--c-suff-bg);
+    }
+
+    .hw-input.incorrect {
+      border-color: var(--c-pref);
+      background: var(--c-pref-bg);
+    }
+
+    .fb-msg {
+      font-size: 0.84rem;
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    .char-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      background: #F1F5F9;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border-color);
+    }
+
+    .char-key {
+      background: #FFFFFF;
+      border: 1px solid #94A3B8;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: 'Consolas', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARA SUPERIOARĂ DE CONTROL (FĂRĂ BUTON DE PRINT) -->
+  <header class="top-bar">
+    <div class="brand-title">
+      <h1>OLR „Solomon Marcus” — Modulul de Morfologie Non-Liniară & Structura Verbului</h1>
+      <span>Clasele V–VIII (Secțiunile Exercițiu A & Exercițiu B) • Predare Interactivă „Zero-Drawing”</span>
+    </div>
+    <div class="top-controls">
+      <div class="view-switcher">
+        <button class="view-btn active" id="btn-view-teach" onclick="switchMainView('teaching')">
+          🖥️ PASUL 2: Predare la Clasăm (Etapele 1–5)
+        </button>
+        <button class="view-btn" id="btn-view-hw" onclick="switchMainView('homework')">
+          📝 PASUL 3: Previzualizare Temă Autonomă
+        </button>
+      </div>
+      <button class="mode-toggle-btn" id="btn-mode-toggle" onclick="togglePedagogicalMode()">
+        🎓 Mod Profesor: ACTIV
+      </button>
+    </div>
+  </header>
+
+  <!-- BANDA DE CODIFICARE CROMATICĂ STANDARDIZATĂ -->
+  <div class="legend-bar">
+    <span style="font-weight:800; color:#1E293B;">Codificare Cromatică:</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#2563EB;"></span> <span class="m-root">RĂDĂCINĂ</span> (#2563EB Radical invariabil)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#DC2626;"></span> <span class="m-pref">pref-</span> (#DC2626 Prefix)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#16A34A;"></span> <span class="m-suff">-suf</span> (#16A34A Sufix)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#D97706;"></span> <span class="m-infix">-inf- / redup-</span> (#D97706 Infix, Reduplicare & Morfofonologie)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#9333EA;"></span> <span class="m-part">particulă</span> (#9333EA Particule libere & Operatori)</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- PASUL 2: ECRANUL DE PREDARE INTERACTIVĂ PE 5 ETAPE                    -->
+  <!-- ===================================================================== -->
+  <main class="container" id="view-teaching">
+
+    <nav class="stage-tabs">
+      <button class="stage-tab active" onclick="showStage(1)">
+        <span class="st-num">Etapa 1</span>
+        <span class="st-name">Warm-Up Intuitiv</span>
+        <span class="st-time">⏱️ 10–15 min • Limba Agta & Bontoc</span>
+      </button>
+      <button class="stage-tab" onclick="showStage(2)">
+        <span class="st-num">Etapa 2</span>
+        <span class="st-name">Concepte & Algoritm</span>
+        <span class="st-time">⏱️ 15–20 min • Formule & 4 Pași</span>
+      </button>
+      <button class="stage-tab" onclick="showStage(3)">
+        <span class="st-num">Etapa 3</span>
+        <span class="st-name">Antrenament pe 3 Niveluri</span>
+        <span class="st-time">⏱️ 30–40 min • Swahili, Tepehuan, Aroma</span>
+      </button>
+      <button class="stage-tab" onclick="showStage(4)">
+        <span class="st-num">Etapa 4</span>
+        <span class="st-name">Atelierul de Redactare</span>
+        <span class="st-time">⏱️ 10–15 min • Elevul A vs. Elevul B</span>
+      </button>
+      <button class="stage-tab" onclick="showStage(5)">
+        <span class="st-num">Etapa 5</span>
+        <span class="st-name">Cheat-Sheet & Alocare Temă</span>
+        <span class="st-time">⏱️ 5–10 min • Regulile de Aur</span>
+      </button>
+    </nav>
+
+    <!-- ETAPA 1: WARM-UP INTUITIV -->
+    <section class="stage-panel" id="stage-1">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Etapa 1 • Warm-Up & Captarea Atenției (10–15 min)</span>
+            <h2 class="card-title" style="margin-top:6px;">Cum „spargem” o rădăcină? Infixare și Reduplicare în Filipine (Bontoc & Agta)</h2>
+          </div>
+          <div class="timer-box">
+            <span>⏱️ Sprint Warm-Up:</span>
+            <span class="timer-display" id="warmup-timer">04:00</span>
+            <button class="timer-btn start" onclick="startTimer()">Start</button>
+            <button class="timer-btn" onclick="pauseTimer()">Pauză</button>
+            <button class="timer-btn" onclick="resetTimer()">Reset</button>
+          </div>
+        </div>
+
+        <div class="teacher-only">
+          <h4>🎯 Obiective Didactice & Indicații pentru Profesor (Warm-Up)</h4>
+          <ul>
+            <li><strong>Dezbatere temă anterioară (3 min):</strong> Reamintiți elevilor că în limbile europene afixele se atașează la marginile cuvântului. Întrebați clasa: <em>„Ce ne facem când o limbă despică rădăcina chiar după prima consoană sau își dublează prima silabă?”</em></li>
+            <li><strong>Capcana 1 (Infix vs. Prefix la inițială vocalică):</strong> La <em>pirak → palapirak</em>, secvența <span class="m-infix">-ala-</span> apare după prima consoană (<span class="math-var">C<sub>1</sub></span> + <code>ala</code> + <span class="math-var">C<sub>1</sub>V<sub>1</sub>...</span>). Dar la <em>assaŋ → alaʔassaŋ</em> (cuvânt care începe cu vocala <em>a-</em>), apare ocluziunea glotală <span class="m-infix">ʔ</span> pentru a separa două vocale identice în hiat (<em>a + a → aʔa</em>).</li>
+            <li><strong>Capcana 2 (Plural vs. „Foarte”):</strong> La plural se repetă <strong>întreaga primă silabă</strong> CVC (<em>tak-takki</em>), pe când la „foarte” se repetă doar <strong>primele două sunete</strong> CV sau VC (<em>ad-adanuk</em>).</li>
+          </ul>
+        </div>
+
+        <div class="enunt-box">
+          <div class="enunt-header">
+            <span class="enunt-tag">📋 Datele și Cerința de Warm-Up</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">Sursa: Vlad A. Neacșu (2024), Cap. 5.1 & OJL 2019, Exercițiu B, Subiectul I</span>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <h3 style="font-size:1rem; margin-bottom:6px; color:var(--accent-navy);">A. Limba Bontoc (Filipine)</h3>
+              <table class="data-table">
+                <thead>
+                  <tr><th>Adjectiv de bază</th><th>Verb derivat</th><th>Analiză (După rezolvare)</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>fikas</strong> (‘puternic’)</td>
+                    <td><strong>fumikas</strong> (‘a fi puternic’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-root">f</span><span class="m-infix">-um-</span><span class="m-root">ikas</span></span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>kilad</strong> (‘roșu’)</td>
+                    <td><strong>kumilad</strong> (‘a fi roșu’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-root">k</span><span class="m-infix">-um-</span><span class="m-root">ilad</span></span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>pusi</strong> (‘sărac’)</td>
+                    <td><strong>pumusi</strong> (‘a fi sărac’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-root">p</span><span class="m-infix">-um-</span><span class="m-root">usi</span></span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div>
+              <h3 style="font-size:1rem; margin-bottom:6px; color:var(--accent-navy);">B. Limba Agta (Insula Luzon, Filipine)</h3>
+              <table class="data-table">
+                <thead>
+                  <tr><th>Cuvânt de bază</th><th>Formă derivată în Agta</th><th>Analiză (După rezolvare)</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>pirak</strong> (‘ban’) / <strong>bag</strong> (‘chilot’)</td>
+                    <td><strong>palapirak</strong> (‘bănuț’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-infix">p-ala-</span><span class="m-root">pirak</span> (<span class="math-var">C<sub>1</sub></span> + <code>ala-</code> + Răd.)</span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>assaŋ</strong> (‘mic’)</td>
+                    <td><strong>alaʔassaŋ</strong> (‘micuț’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-infix">ala-ʔ-</span><span class="m-root">assaŋ</span> (inițială <em>a</em> → <code>alaʔ-</code>)</span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>takki</strong> (‘picior’)</td>
+                    <td><strong>taktakki</strong> (‘picioare’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-infix">tak-</span><span class="m-root">takki</span> (reduplicare silabă CVC-)</span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>adanuk</strong> (‘lung’) / <strong>dana</strong> (‘bătrân’)</td>
+                    <td><strong>adadanuk</strong> (‘foarte lung’)</td>
+                    <td><span class="warmup-reveal hidden"><span class="m-infix">ad-</span><span class="m-root">adanuk</span> (primele 2 litere VC-/CV-)</span><span class="warmup-placeholder" style="color:#94A3B8;">[ Ascuns ]</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="cerinte-box">
+            <h4>✍️ Cerința Sprintului de 4 Minute:</h4>
+            <p style="font-size:0.92rem;">
+              1. Știind că în Bontoc <strong>bato</strong> = ‘piatră’, cum se spune <strong>‘a deveni piatră’</strong>?<br/>
+              2. Știind că în Agta <strong>abikan</strong> = ‘aproape’, <strong>dana</strong> = ‘bătrân’ și <strong>takki</strong> = ‘picior’, traduceți în agta: <strong>(a) foarte aproape</strong>, <strong>(b) foarte bătrân</strong>, <strong>(c) picioruș</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="btn-action green" onclick="toggleWarmupReveal()">🔓 Afișează / Ascunde Rezolvarea Warm-Up</button>
+        </div>
+
+        <div class="rezolvare-box warmup-reveal hidden">
+          <div class="rezolvare-header">
+            <span class="rezolvare-tag">✅ Rezolvarea & Regulile Descoperite la Warm-Up</span>
+          </div>
+          <p style="font-size:0.93rem;">
+            • <strong>1 (Bontoc):</strong> ‘a deveni piatră’ = <span class="m-root">b</span><span class="m-infix">um</span><span class="m-root">ato</span> (infixul <code>-um-</code> inserat după prima consoană <span class="math-var">C<sub>1</sub></span>).<br/>
+            • <strong>2 (Agta):</strong>
+              <strong>(a) foarte aproape</strong> = <span class="m-infix">ab</span><span class="m-root">abikan</span> (primele două litere repetate);
+              <strong>(b) foarte bătrân</strong> = <span class="m-infix">da</span><span class="m-root">dana</span>;
+              <strong>(c) picioruș</strong> = <span class="m-infix">tala</span><span class="m-root">takki</span> (<span class="math-var">C<sub>1</sub></span> + <code>-ala-</code> + cuvântul).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 2: CONCEPTE, SCHEME VIZUALE & ALGORITM -->
+    <section class="stage-panel hidden" id="stage-2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Etapa 2 • Concepte, Formule „Zero-Drawing” & Algoritm (15–20 min)</span>
+            <h2 class="card-title" style="margin-top:6px;">Cele 3 Operații Non-Liniare & Algoritmul de Decodare în 4 Pași</h2>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:24px;">
+          <div class="formula-card">
+            <div class="formula-title">1. Infixare (Ancorare după <span class="math-var">C<sub>1</sub></span>)</div>
+            <div class="formula-math">
+              <span class="math-var">C<sub>1</sub>V<sub>1</sub>C<sub>2</sub>V<sub>2</sub></span>
+              <span class="arrow-labeled">
+                <span class="arr-text">Infixare -um-</span>
+                <span class="arr-sym">⟶</span>
+              </span>
+              <span>
+                <span class="m-root"><span class="math-var">C<sub>1</sub></span></span><span class="m-infix">-um-</span><span class="m-root"><span class="math-var">V<sub>1</sub>C<sub>2</sub>V<sub>2</sub></span></span>
+              </span>
+            </div>
+            <p style="font-size:0.86rem; color:var(--text-muted);">
+              Infixul se inserează imediat după <strong>consoana din atacul primei silabe (<span class="math-var">C<sub>1</sub></span>)</strong>, înaintea nucleului vocalic <span class="math-var">V<sub>1</sub></span>:<br/>
+              <span class="m-root">k</span><span class="m-infix">um</span><span class="m-root">ilad</span> (Bontoc), <span class="m-infix">t-ala-</span><span class="m-root">takki</span> (Agta).
+            </p>
+          </div>
+
+          <div class="formula-card">
+            <div class="formula-title">2. Reduplicare Parțială (<span class="math-var">C<sub>1</sub>V<sub>1</sub>-</span> / <span class="math-var">C<sub>1</sub>V<sub>1</sub>C<sub>2</sub>-</span>)</div>
+            <div class="formula-math">
+              <span class="math-var">C<sub>1</sub>V<sub>1</sub>...</span>
+              <span class="arrow-labeled">
+                <span class="arr-text">Reduplicare parțială</span>
+                <span class="arr-sym">⟶</span>
+              </span>
+              <span>
+                <span class="m-infix"><span class="math-var">C<sub>1</sub>V<sub>1</sub></span>-</span><span class="m-root"><span class="math-var">C<sub>1</sub>V<sub>1</sub>...</span></span>
+              </span>
+            </div>
+            <p style="font-size:0.86rem; color:var(--text-muted);">
+              Copierea unui șablon prosodic (prima silabă deschisă <span class="math-var">C<sub>1</sub>V<sub>1</sub>-</span> sau închisă <span class="math-var">C<sub>1</sub>V<sub>1</sub>C<sub>2</sub>-</span>) atașat la stânga rădăcinii:<br/>
+              <span class="m-infix">ma-</span><span class="m-root">mara</span> (Tepehuan), <span class="m-infix">tak-</span><span class="m-root">takki</span> (Agta).
+            </p>
+          </div>
+
+          <div class="formula-card">
+            <div class="formula-title">3. Circumfixare (Afix Discontinuu)</div>
+            <div class="formula-math">
+              <span class="m-pref">pref-</span>
+              <span>+</span>
+              <span class="m-root">RĂDĂCINĂ</span>
+              <span>+</span>
+              <span class="m-suff">-suf</span>
+            </div>
+            <p style="font-size:0.86rem; color:var(--text-muted);">
+              Două segmente aplicate simultan la ambele capete ale rădăcinii pentru o singură valoare gramaticală:<br/>
+              <span class="m-pref">um-</span><span class="m-root">dweb</span><span class="m-suff">-i</span> (‘pictor’, Zulu), <span class="m-pref">ma-</span>...<span class="m-suff">-wai</span> (‘tot’, Aroma).
+            </p>
+          </div>
+        </div>
+
+        <h3 style="font-size:1.1rem; color:var(--accent-navy); margin-bottom:12px;">🧭 Algoritmul de Decodare Morfologică în 4 Pași (Vlad A. Neacșu, 2024)</h3>
+        <div class="grid-2">
+          <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:10px; padding:16px;">
+            <span class="m-pref">PASUL 1: Scanarea Marginilor</span>
+            <h4 style="margin:8px 0 4px;">Izolarea Prefixelor, Sufixelor și Circumfixelor</h4>
+            <p style="font-size:0.9rem; color:var(--text-muted);">
+              Aliniem cuvintele cu același sens gramatical și tăiem invariantele de la stânga (<span class="m-pref">pref-</span>) și de la dreapta (<span class="m-suff">-suf</span>). Nu uitați de <strong>morfemul zero (∅)</strong> când o formă este nemarcată!
+            </p>
+          </div>
+
+          <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:10px; padding:16px;">
+            <span class="m-infix">PASUL 2: Ancorarea Consonantică C<sub>1</sub></span>
+            <h4 style="margin:8px 0 4px;">Detecția Infixelor Interne</h4>
+            <p style="font-size:0.9rem; color:var(--text-muted);">
+              Dacă prima consoană a rădăcinii rămâne pe loc, dar între <span class="math-var">C<sub>1</sub></span> și prima vocală <span class="math-var">V<sub>1</sub></span> apare un segment fix (ex. <code>-um-</code>, <code>-in-</code>, <code>-ala-</code>), avem un <strong>infix</strong>. Regula se formulează fonologic (după atacul silabic <span class="math-var">C<sub>1</sub></span>).
+            </p>
+          </div>
+
+          <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:10px; padding:16px;">
+            <span class="m-root">PASUL 3: Testul Rădăcinilor cu Inițială Vocalică (V<sub>1</sub>)</span>
+            <h4 style="margin:8px 0 4px;">Ce se întâmplă când lipsește consoana inițială C<sub>1</sub>?</h4>
+            <p style="font-size:0.9rem; color:var(--text-muted);">
+              Cuvintele care încep cu o vocală dezvăluie regulile ascunse: (a) epenteza ocluziunii glotale <span class="m-infix">ʔ</span> (Agta: <em>ala-ʔ-abbiŋ</em>), (b) alungirea vocalei inițiale (Tepehuan: <em>a-aduñi</em>), (c) inserția unei consoane (Tepehuan: <em>u-x-uyi</em>).
+            </p>
+          </div>
+
+          <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:10px; padding:16px;">
+            <span class="m-part">PASUL 4: Tiparul Reduplicării & Mutațiile Interne</span>
+            <h4 style="margin:8px 0 4px;">Delimitarea Șablonului CV- vs. CVC- și Asimilarea</h4>
+            <p style="font-size:0.9rem; color:var(--text-muted);">
+              Despărțim în silabe (VCV → V.CV, VCCV → VC.CV) pentru a vedea dacă reduplicarea copiază o silabă deschisă (CV-) sau închisă (CVC-), și verificăm dacă consoana ajunsă între două vocale suferă mutații (ex. <em>v → p</em> în Tepehuan: <em>voita → vopoita</em>).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 3: ANTRENAMENT PE 3 NIVELURI + OPȚIONALE -->
+    <section class="stage-panel hidden" id="stage-3">
+
+      <!-- EXEMPLUL 1: LIMBA SWAHILI -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Exemplul 1 (Inițial / Cls. V–VI) • Widget: Stepper Pas-cu-Pas</span>
+            <h2 class="card-title" style="margin-top:6px;">Limba Swahili (Vlad A. Neacșu 2024, Cap. 6, Problema 6.1)</h2>
+          </div>
+        </div>
+
+        <div class="enunt-box">
+          <div class="enunt-header">
+            <span class="enunt-tag">📋 ENUNȚUL PROBLEMEI 6.1 (Swahili)</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">Autor: Ronnie Sim (Princeton) • Vlad A. Neacșu (2024), p. 206</span>
+          </div>
+          <div class="grid-2">
+            <table class="data-table" style="margin:0;">
+              <thead><tr><th>#</th><th>Swahili</th><th>Traducere</th></tr></thead>
+              <tbody>
+                <tr><td>1.</td><td><strong>Ninasema.</strong></td><td>Eu vorbesc.</td></tr>
+                <tr><td>2.</td><td><strong>Wunasema.</strong></td><td>Tu vorbești.</td></tr>
+                <tr><td>3.</td><td><strong>Anasema.</strong></td><td>Ea vorbește.</td></tr>
+                <tr><td>4.</td><td><strong>Wanasema.</strong></td><td>Ei vorbesc.</td></tr>
+                <tr><td>5.</td><td><strong>Ninaona.</strong></td><td>Eu văd.</td></tr>
+              </tbody>
+            </table>
+            <table class="data-table" style="margin:0;">
+              <thead><tr><th>#</th><th>Swahili</th><th>Traducere</th></tr></thead>
+              <tbody>
+                <tr><td>6.</td><td><strong>Niliona.</strong></td><td>Eu am văzut.</td></tr>
+                <tr><td>7.</td><td><strong>Ninawaona.</strong></td><td>Eu îi văd.</td></tr>
+                <tr><td>8.</td><td><strong>Niliwuona.</strong></td><td>Eu te-am văzut.</td></tr>
+                <tr><td>9.</td><td><strong>Ananiona.</strong></td><td>Ea mă vede.</td></tr>
+                <tr><td>10.</td><td><strong>Wutakaniona.</strong></td><td>Tu mă vei vedea.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="cerinte-box">
+            <h4>✍️ Cerința 6.1a — Traduceți în limba swahili:</h4>
+            <div class="grid-3" style="font-size:0.93rem;">
+              <div><strong>11. (1):</strong> <em>Ea i-a văzut.</em></div>
+              <div><strong>12. (2):</strong> <em>Eu te voi vedea.</em></div>
+              <div><strong>13. (3):</strong> <em>Ea m-a văzut.</em></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rezolvare-box">
+          <div class="rezolvare-header">
+            <span class="rezolvare-tag">🔬 LABORATORUL DE REZOLVARE PAS-CU-PAS (Pasul 0 → Pasul 4)</span>
+          </div>
+          <div class="stepper-controls">
+            <button class="step-btn active" id="sw-btn-0" onclick="setSwahiliStep(0)">Pasul 0: Punct de plecare</button>
+            <button class="step-btn" id="sw-btn-1" onclick="setSwahiliStep(1)">Pasul 1: Rădăcina (-V)</button>
+            <button class="step-btn" id="sw-btn-2" onclick="setSwahiliStep(2)">Pasul 2: Subiectul (S-)</button>
+            <button class="step-btn" id="sw-btn-3" onclick="setSwahiliStep(3)">Pasul 3: Timpul (-T-)</button>
+            <button class="step-btn" id="sw-btn-4" onclick="setSwahiliStep(4)">Pasul 4: Obiectul (-O-), Formula & Soluțiile</button>
+          </div>
+          <div class="step-explanation" id="sw-step-desc"></div>
+          <div class="grid-2">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Segmentare în curs de descoperire</th><th>Traducere</th></tr></thead>
+              <tbody id="swahili-table-body"></tbody>
+            </table>
+            <div>
+              <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:10px; padding:16px; margin-bottom:16px;">
+                <h4 style="margin-bottom:8px; color:var(--accent-navy);">📐 Formula & Morfemele Descoperite până la acest pas:</h4>
+                <div id="sw-formula-dynamic" style="font-size:1.05rem; font-weight:700; padding:12px; background:#FFFFFF; border:1px solid var(--border-color); border-radius:8px; margin-bottom:12px; text-align:center;"></div>
+                <div id="sw-morphemes-dynamic" style="font-size:0.88rem;"></div>
+              </div>
+              <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:16px;">
+                <h4 style="margin-bottom:8px; color:var(--c-root);">✅ Rezolvarea Cerinței 6.1a (Se dezvăluie la Pasul 4):</h4>
+                <p style="font-size:0.92rem; margin-bottom:6px;">11. <em>Ea i-a văzut.</em> → <span id="sw-ans-11" class="slot-chip" onclick="setSwahiliStep(4)">[ Afișează la Pasul 4 ]</span></p>
+                <p style="font-size:0.92rem; margin-bottom:6px;">12. <em>Eu te voi vedea.</em> → <span id="sw-ans-12" class="slot-chip" onclick="setSwahiliStep(4)">[ Afișează la Pasul 4 ]</span></p>
+                <p style="font-size:0.92rem;">13. <em>Ea m-a văzut.</em> → <span id="sw-ans-13" class="slot-chip" onclick="setSwahiliStep(4)">[ Afișează la Pasul 4 ]</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXEMPLUL 2: LIMBA TEPEHUAN -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Exemplul 2 (Mediu / Cls. VII–VIII) • Widget: Slot-Mapping Click-to-Reveal [ ? ]</span>
+            <h2 class="card-title" style="margin-top:6px;">Limba Tepehuan — Olimpiada Județeană 2016, Subiectul 6 (30 puncte)</h2>
+          </div>
+        </div>
+
+        <div class="enunt-box">
+          <div class="enunt-header">
+            <span class="enunt-tag">📋 ENUNȚUL OFICIAL AL SUBIECTULUI 6: TEPEHUAN (30 puncte)</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">Olimpiada de Lingvistică, faza județeană, ed. 2016 • Adaptat de Roxana Dincă</span>
+          </div>
+          <div class="grid-2">
+            <table class="data-table" style="margin:0;">
+              <thead>
+                <tr><th>Singular</th><th>Plural</th><th>Traducere</th><th class="tep-class-col hidden">Clasa Descoperită</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>toši</strong></td><td><span class="slot-chip tep-slot" data-html="<span class='m-infix'>to</span><span class='m-root'>toši</span>" onclick="toggleSlot(this)">(1) [ ? ]</span></td><td>iepure</td><td class="tep-class-col hidden"><span class="badge-level">Clasa A (CV-CV)</span></td></tr>
+                <tr><td><span class="slot-chip tep-slot" data-html="<span class='m-root'>kali</span>" onclick="toggleSlot(this)">(2) [ ? ]</span></td><td><strong>kakali</strong></td><td>bărbat</td><td class="tep-class-col hidden"><span class="badge-level">Clasa A (CV-CV)</span></td></tr>
+                <tr><td><strong>obai</strong></td><td><strong>obai</strong></td><td>străin</td><td class="tep-class-col hidden"><span class="badge-level">Clasa B (V-CV, 2 sil.)</span></td></tr>
+                <tr><td><strong>uši</strong></td><td><span class="slot-chip tep-slot" data-html="<span class='m-root'>uši</span>" onclick="toggleSlot(this)">(3) [ ? ]</span></td><td>copac</td><td class="tep-class-col hidden"><span class="badge-level">Clasa B (V-CV, 2 sil.)</span></td></tr>
+                <tr><td><strong>mara</strong></td><td><strong>mamara</strong></td><td>fiu</td><td class="tep-class-col hidden"><span class="badge-level">Clasa A (CV-CV)</span></td></tr>
+                <tr><td><span class="slot-chip tep-slot" data-html="<span class='m-root'>voita</span>" onclick="toggleSlot(this)">(4) [ ? ]</span></td><td><strong>vopoita</strong></td><td>mătușă</td><td class="tep-class-col hidden"><span class="badge-level">Clasa D (v- inițial)</span></td></tr>
+                <tr><td><strong>aduñi</strong></td><td><strong>aaduñi</strong></td><td>prieten</td><td class="tep-class-col hidden"><span class="badge-level">Clasa E (≥3 sil. cu V-)</span></td></tr>
+                <tr><td><strong>uyi</strong></td><td><strong>uxuyi</strong></td><td>săgeată</td><td class="tep-class-col hidden"><span class="badge-level">Clasa C (tip Vyi)</span></td></tr>
+              </tbody>
+            </table>
+            <table class="data-table" style="margin:0;">
+              <thead>
+                <tr><th>Singular</th><th>Plural</th><th>Traducere</th><th class="tep-class-col hidden">Clasa Descoperită</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>vavoi</strong></td><td><span class="slot-chip tep-slot" data-html="<span class='m-infix'>va</span><span class='m-pref'>p</span><span class='m-root'>avoi</span>" onclick="toggleSlot(this)">(5) [ ? ]</span></td><td>stâncă</td><td class="tep-class-col hidden"><span class="badge-level">Clasa D (v- inițial)</span></td></tr>
+                <tr><td><strong>tova</strong></td><td><span class="slot-chip tep-slot" data-html="<span class='m-infix'>to</span><span class='m-root'>tova</span>" onclick="toggleSlot(this)">(6) [ ? ]</span></td><td>curcan</td><td class="tep-class-col hidden"><span class="badge-level">Clasa A (CV-CV)</span></td></tr>
+                <tr><td><strong>adatomali</strong></td><td><span class="slot-chip tep-slot" data-html="<span class='m-infix'>a</span><span class='m-root'>adatomali</span>" onclick="toggleSlot(this)">(7) [ ? ]</span></td><td>specii de păsări</td><td class="tep-class-col hidden"><span class="badge-level">Clasa E (≥3 sil. cu V-)</span></td></tr>
+                <tr><td><span class="slot-chip tep-slot" data-html="<span class='m-root'>oyi</span>" onclick="toggleSlot(this)">(8) [ ? ]</span></td><td><strong>oxoyi</strong></td><td>ac</td><td class="tep-class-col hidden"><span class="badge-level">Clasa C (tip Vyi)</span></td></tr>
+                <tr><td><strong>sukuli</strong></td><td><span class="slot-chip tep-slot" data-html="<span class='m-infix'>su</span><span class='m-root'>sukuli</span>" onclick="toggleSlot(this)">(9) [ ? ]</span></td><td>frate mai mic</td><td class="tep-class-col hidden"><span class="badge-level">Clasa A (CV-CV)</span></td></tr>
+                <tr><td><strong>dagi</strong></td><td><strong>dadagi</strong></td><td>șobolan</td><td class="tep-class-col hidden"><span class="badge-level">Clasa A (CV-CV)</span></td></tr>
+                <tr><td><strong>vuxi</strong></td><td><strong>vupuxi</strong></td><td>ochi</td><td class="tep-class-col hidden"><span class="badge-level">Clasa D (v- inițial)</span></td></tr>
+                <tr><td><span class="slot-chip tep-slot" data-html="<span class='m-root'>ayi</span>" onclick="toggleSlot(this)">(10) [ ? ]</span></td><td><strong>axayi</strong></td><td>borcan cu apă</td><td class="tep-class-col hidden"><span class="badge-level">Clasa C (tip Vyi)</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="cerinte-box">
+            <h4>✍️ Cerințele Oficiale ale Subiectului 6 (Total = 30 puncte):</h4>
+            <ol style="padding-left:20px; font-size:0.92rem;">
+              <li><strong>Cerința 1 (10 puncte):</strong> Completați spațiile libere (1)–(10) din tabelul de mai sus!</li>
+              <li><strong>Cerința 2 (5 puncte):</strong> Scrieți forma de plural a următoarelor 5 substantive: <strong>šiagi</strong>, <strong>aaši</strong>, <strong>abuna</strong>, <strong>vama</strong>, <strong>iyi</strong>.</li>
+              <li><strong>Cerința 3 (15 puncte):</strong> Explicați cum ați rezolvat!</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="rezolvare-box">
+          <div class="rezolvare-header">
+            <span class="rezolvare-tag">🔓 REZOLVAREA CERINȚELOR 1, 2 ȘI 3 (Tepehuan)</span>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button class="btn-action" onclick="revealAllSlots(true)">1. Dezvăluie Sloturile (1)–(10)</button>
+              <button class="btn-action" onclick="toggleTepehuanClasses()">2. Afișează / Ascunde Coloana „Clasa”</button>
+              <button class="btn-action green" onclick="toggleElement('tep-full-solution')">3. Afișează / Ascunde Rezolvarea Cerințelor 2 & 3 (Barem)</button>
+              <button class="btn-secondary" onclick="revealAllSlots(false)">Reset Sloturi</button>
+            </div>
+          </div>
+          <div id="tep-full-solution" class="hidden">
+            <div class="grid-2">
+              <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:14px;">
+                <h4 style="color:var(--accent-navy); margin-bottom:8px;">✅ Rezolvarea Cerinței 2 (5 puncte):</h4>
+                <ul style="padding-left:18px; font-size:0.92rem; line-height:1.8;">
+                  <li><strong>šiagi</strong> → <span class="m-infix">ši</span><span class="m-root">šiagi</span> (Clasa A)</li>
+                  <li><strong>aaši</strong> → <span class="m-root">aaši</span> (Clasa B)</li>
+                  <li><strong>abuna</strong> → <span class="m-infix">a</span><span class="m-root">abuna</span> (Clasa E)</li>
+                  <li><strong>vama</strong> → <span class="m-infix">va</span><span class="m-pref">p</span><span class="m-root">ama</span> (Clasa D)</li>
+                  <li><strong>iyi</strong> → <span class="m-pref">ix</span><span class="m-root">iyi</span> (Clasa C)</li>
+                </ul>
+              </div>
+              <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:14px;">
+                <h4 style="color:var(--accent-navy); margin-bottom:8px;">✅ Rezolvarea Cerinței 3 — Cele 5 Categorii (15 puncte):</h4>
+                <ul style="padding-left:18px; font-size:0.88rem; line-height:1.6;">
+                  <li><strong>(A) CV-CV (fără v- inițial):</strong> repetarea primei silabe (<em>toši → totoši</em>).</li>
+                  <li><strong>(B) Două silabe V-CV:</strong> plural identic cu singularul (<em>obai → obai</em>).</li>
+                  <li><strong>(C) Forma Vyi:</strong> prefixul <em>vocală inițială + x-</em> (<em>uyi → uxuyi</em>).</li>
+                  <li><strong>(D) Silabă inițială cu „v”:</strong> repetarea primei silabe + <em>v → p</em> intervocalic (<em>voita → vopoita</em>).</li>
+                  <li><strong>(E) ≥ 3 silabe cu vocală inițială:</strong> alungirea vocalei inițiale (<em>aduñi → aaduñi</em>).</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXEMPLUL 3: LIMBA AROMA -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Exemplul 3 (Olimpic / Cls. VII–VIII) • Widget: Matrice 2D & Șablon Polipersonal</span>
+            <h2 class="card-title" style="margin-top:6px;">Limba Aroma — Olimpiada Națională 2024, Exercițiu B, Problema 2 (100 puncte)</h2>
+          </div>
+        </div>
+
+        <div class="enunt-box">
+          <div class="enunt-header">
+            <span class="enunt-tag">📋 ENUNȚUL OFICIAL AL PROBLEMEI NR. 2: LIMBA AROMA (100 puncte)</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">ONL „Solomon Marcus” 2024, Secțiunea Exercițiu B (cls. VII–VIII) • Autor: Paul Helmer</span>
+          </div>
+          <div class="grid-2">
+            <table class="data-table" style="margin:0; font-size:0.88rem;">
+              <thead><tr><th>#</th><th>Limba Aroma</th><th>Traducerea în română</th></tr></thead>
+              <tbody id="aroma-corpus-left"></tbody>
+            </table>
+            <table class="data-table" style="margin:0; font-size:0.88rem;">
+              <thead><tr><th>#</th><th>Limba Aroma</th><th>Traducerea în română</th></tr></thead>
+              <tbody id="aroma-corpus-right"></tbody>
+            </table>
+          </div>
+          <p style="font-size:0.92rem; margin-top:12px; background:#FFFFFF; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+            <strong>De asemenea, se cunosc următoarele verbe:</strong>
+            <code>pala</code> – a dansa, &nbsp;<code>thapana</code> – a vâna, &nbsp;<code>riku</code> – a înota, &nbsp;<code>vagi</code> – a omorî.
+          </p>
+          <div class="cerinte-box">
+            <h4>✍️ Cerințele Problemei nr. 2:</h4>
+            <div class="grid-2" style="font-size:0.9rem; margin-top:8px;">
+              <div>
+                <strong>(a) Traduceți în limba română:</strong>
+                <ol start="17" style="padding-left:22px; margin-top:4px;">
+                  <li><strong>panamakea</strong></li><li><strong>peripaku</strong></li><li><strong>maonopalawai</strong></li>
+                  <li><strong>evavagimu</strong></li><li><strong>igothapanatha</strong></li><li><strong>pegevethapana</strong></li>
+                </ol>
+              </div>
+              <div>
+                <strong>(b) Traduceți în limba aroma:</strong>
+                <ol start="23" style="padding-left:22px; margin-top:4px;">
+                  <li><em>voi ați vânat</em></li><li><em>ei tocmai l-au făcut să danseze</em></li><li><em>el mă va face să înot</em></li><li><em>tu tocmai te-ai învârtit</em></li>
+                  <li><em>noi tocmai l-am omorât</em></li><li><em>ei urmează să înoate</em></li><li><em>eu urmează să îi tot vânez</em></li><li><em>noi ne-am tot făcut să ne învârtim</em></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rezolvare-box">
+          <div class="rezolvare-header">
+            <span class="rezolvare-tag">🔬 LABORATORUL DE REZOLVARE A PROBLEMEI 2 (Aroma)</span>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button class="btn-action" id="btn-aroma-seg" onclick="toggleAromaSegmentation()">🎨 Pasul 1: Segmentează Cromatic Corpusul (1–16)</button>
+              <button class="btn-action" onclick="toggleElement('aroma-rules-panel')">📐 Pasul 2: Dezvăluie Șablonul & Matricea 2D</button>
+              <button class="btn-action green" onclick="toggleElement('aroma-answers-panel')">✅ Pasul 3: Afișează Soluțiile (a) și (b)</button>
+            </div>
+          </div>
+
+          <div id="aroma-rules-panel" class="hidden" style="margin-bottom:20px;">
+            <div style="background:#0F172A; color:#FFFFFF; padding:16px; border-radius:10px; margin-bottom:16px; text-align:center;">
+              <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; font-size:0.98rem;">
+                <span class="m-part">1. (ma-) „tot”</span><span>+</span><span class="m-pref">2. TS (Timp & Subiect)</span><span>+</span><span class="m-infix">3. (va-) Cauzativ</span><span>+</span><span class="m-infix">4. (ve-) Reflexiv</span><span>+</span><span class="m-root">5. V (Rădăcină)</span><span>+</span><span class="m-part">6. (-wai) „tot”</span><span>+</span><span class="m-suff">7. (-O) Obiect Direct</span>
+              </div>
+            </div>
+            <div class="grid-2">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Subiect</th><th>urmează să + V</th><th>viitor simplu</th><th>tocmai + V</th><th>trecut compus</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>I sg.</strong></td><td class="matrix-cell" onclick="inspectAromaTS('ana', 'Pers. I sg.', 'urmează să + V')">ana</td><td class="matrix-cell" onclick="inspectAromaTS('pana', 'Pers. I sg.', 'viitor simplu')">pana</td><td class="matrix-cell" onclick="inspectAromaTS('a', 'Pers. I sg.', 'tocmai + V')">a</td><td class="matrix-cell" onclick="inspectAromaTS('pa', 'Pers. I sg.', 'trecut compus')">pa</td></tr>
+                  <tr><td><strong>II sg.</strong></td><td class="matrix-cell" onclick="inspectAromaTS('ono', 'Pers. a II-a sg.', 'urmează să + V')">ono</td><td class="matrix-cell" onclick="inspectAromaTS('pono', 'Pers. a II-a sg.', 'viitor simplu')">pono</td><td class="matrix-cell" onclick="inspectAromaTS('o', 'Pers. a II-a sg.', 'tocmai + V')">o</td><td class="matrix-cell" onclick="inspectAromaTS('po', 'Pers. a II-a sg.', 'trecut compus')">po</td></tr>
+                  <tr><td><strong>III sg.</strong></td><td class="matrix-cell" onclick="inspectAromaTS('ene', 'Pers. a III-a sg.', 'urmează să + V')">ene</td><td class="matrix-cell" onclick="inspectAromaTS('pene', 'Pers. a III-a sg.', 'viitor simplu')">pene</td><td class="matrix-cell" onclick="inspectAromaTS('e', 'Pers. a III-a sg.', 'tocmai + V')">e</td><td class="matrix-cell" onclick="inspectAromaTS('pe', 'Pers. a III-a sg.', 'trecut compus')">pe</td></tr>
+                  <tr><td><strong>I pl.</strong></td><td class="matrix-cell" onclick="inspectAromaTS('iga', 'Pers. I pl.', 'urmează să + V')">iga</td><td class="matrix-cell" onclick="inspectAromaTS('piga', 'Pers. I pl.', 'viitor simplu')">piga</td><td class="matrix-cell" onclick="inspectAromaTS('ga', 'Pers. I pl.', 'tocmai + V')">ga</td><td class="matrix-cell" onclick="inspectAromaTS('paga', 'Pers. I pl.', 'trecut compus')">paga</td></tr>
+                  <tr><td><strong>II pl.</strong></td><td class="matrix-cell" onclick="inspectAromaTS('igo', 'Pers. a II-a pl.', 'urmează să + V')">igo</td><td class="matrix-cell" onclick="inspectAromaTS('pigo', 'Pers. a II-a pl.', 'viitor simplu')">pigo</td><td class="matrix-cell" onclick="inspectAromaTS('go', 'Pers. a II-a pl.', 'tocmai + V')">go</td><td class="matrix-cell" onclick="inspectAromaTS('pogo', 'Pers. a II-a pl.', 'trecut compus')">pogo</td></tr>
+                  <tr><td><strong>III pl.</strong></td><td class="matrix-cell" onclick="inspectAromaTS('ige', 'Pers. a III-a pl.', 'urmează să + V')">ige</td><td class="matrix-cell" onclick="inspectAromaTS('pige', 'Pers. a III-a pl.', 'viitor simplu')">pige</td><td class="matrix-cell" onclick="inspectAromaTS('ge', 'Pers. a III-a pl.', 'tocmai + V')">ge</td><td class="matrix-cell" onclick="inspectAromaTS('pege', 'Pers. a III-a pl.', 'trecut compus')">pege</td></tr>
+                </tbody>
+              </table>
+              <div>
+                <div id="aroma-inspector" style="background:#EFF6FF; border:1px solid #93C5FD; padding:12px; border-radius:8px; font-size:0.88rem;">
+                  👆 Click pe orice celulă din Matricea 2D pentru simulare! Obiectele sunt: 1sg = <code>-ku</code>, 2sg = <code>-mu</code>, 3sg = <code>-a</code> (S sg.) / <code>-tha</code> (S pl.), 3pl = <code>-ria</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="aroma-answers-panel" class="hidden">
+            <div class="grid-2">
+              <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:14px;">
+                <h4 style="color:var(--accent-navy); margin-bottom:8px;">✅ Soluții Cerința (a):</h4>
+                <ul style="padding-left:18px; font-size:0.9rem; line-height:1.75;">
+                  <li>17. <span class="m-pref">pana</span><span class="m-root">make</span><span class="m-suff">a</span> = <strong>Eu îl voi învârti.</strong></li>
+                  <li>18. <span class="m-pref">pe</span><span class="m-root">ripa</span><span class="m-suff">ku</span> = <strong>El m-a știut.</strong></li>
+                  <li>19. <span class="m-part">ma</span><span class="m-pref">ono</span><span class="m-root">pala</span><span class="m-part">wai</span> = <strong>Tu urmează să tot dansezi.</strong></li>
+                  <li>20. <span class="m-pref">e</span><span class="m-infix">va</span><span class="m-root">vagi</span><span class="m-suff">mu</span> = <strong>El tocmai te-a făcut să omori.</strong></li>
+                  <li>21. <span class="m-pref">igo</span><span class="m-root">thapana</span><span class="m-suff">tha</span> = <strong>Voi urmează să îl vânați.</strong></li>
+                  <li>22. <span class="m-pref">pege</span><span class="m-infix">ve</span><span class="m-root">thapana</span> = <strong>Ei s-au vânat.</strong></li>
+                </ul>
+              </div>
+              <div style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:14px;">
+                <h4 style="color:var(--accent-navy); margin-bottom:8px;">✅ Soluții Cerința (b):</h4>
+                <ul style="padding-left:18px; font-size:0.9rem; line-height:1.75;">
+                  <li>23. <span class="m-pref">pogo</span><span class="m-root">thapana</span> &nbsp;|&nbsp; 24. <span class="m-pref">ge</span><span class="m-infix">va</span><span class="m-root">pala</span><span class="m-suff">tha</span></li>
+                  <li>25. <span class="m-pref">pene</span><span class="m-infix">va</span><span class="m-root">riku</span><span class="m-suff">ku</span> &nbsp;|&nbsp; 26. <span class="m-pref">o</span><span class="m-infix">ve</span><span class="m-root">make</span></li>
+                  <li>27. <span class="m-pref">ga</span><span class="m-root">vagi</span><span class="m-suff">tha</span> &nbsp;|&nbsp; 28. <span class="m-pref">ige</span><span class="m-root">riku</span></li>
+                  <li>29. <span class="m-part">ma</span><span class="m-pref">ana</span><span class="m-root">thapana</span><span class="m-part">wai</span><span class="m-suff">ria</span> &nbsp;|&nbsp; 30. <span class="m-part">ma</span><span class="m-pref">paga</span><span class="m-infix">va</span><span class="m-infix">ve</span><span class="m-root">make</span><span class="m-part">wai</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ETAPA 4: ATELIERUL DE REDACTARE A EXPLICAȚIEI -->
+    <section class="stage-panel hidden" id="stage-4">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Etapa 4 • Atelierul de Redactare a Soluției (10–15 min)</span>
+            <h2 class="card-title" style="margin-top:6px;">🔍 Detectorul de Greșeli: Elevul A (3/20 p.) vs. Elevul B (20/20 p.)</h2>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div style="border:2px solid #FCA5A5; background:#FEF2F2; border-radius:10px; padding:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="font-size:1.05rem; color:#991B1B;">❌ Lucrarea Elevului A (Explicație Empirică)</h3>
+              <span style="background:#DC2626; color:#FFF; font-weight:800; padding:4px 10px; border-radius:6px; font-size:0.85rem;">Scor: 3 / 20 puncte</span>
+            </div>
+            <div style="background:#FFFFFF; padding:14px; border-radius:8px; border:1px solid #FECACA; font-size:0.92rem; line-height:1.75;">
+              „Eu am rezolvat problema uitându-mă la cuvinte. Mai întâi am observat că <code>pirak = ban</code>, <code>takki = picior</code>, <code>talobag = gândac</code> și <code>bag = chilot</code>
+              <span class="error-spot" onclick="showAuditFeedback(1)">[1: Dicționar inutil în loc de reguli]</span>.
+              Apoi, pentru diminutiv sau verb, <span class="error-spot" onclick="showAuditFeedback(2)">[2: punem ala / um după prima sau a doua literă a cuvântului]</span>, iar câteodată mai apare și un semn de întrebare <code>?</code> la mijloc.
+              La plural și la cuvântul „foarte”, <span class="error-spot" onclick="showAuditFeedback(3)">[3: se dublează primele 2 sau 3 litere de la început]</span> cum ar fi la <em>taktakki</em> și <em>adadanuk</em>.
+              În Tepehuan, la <em>vopoita</em> <span class="error-spot" onclick="showAuditFeedback(4)">[4: se adaugă grupul -po- la întâmplare înăuntru]</span>.”
+            </div>
+            <div id="audit-feedback-box" style="margin-top:12px; background:#7F1D1D; color:#FEF2F2; padding:12px 14px; border-radius:8px; font-size:0.88rem;">
+              👆 Click pe oricare dintre cele 4 zone marcate cu roșu pentru a afișa justificarea depunctării din baremul comisiei!
+            </div>
+          </div>
+
+          <div style="border:2px solid #86EFAC; background:#F0FDF4; border-radius:10px; padding:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+              <h3 style="font-size:1.05rem; color:#166534;">✅ Lucrarea Elevului B (Model Olimpic)</h3>
+              <span style="background:#16A34A; color:#FFF; font-weight:800; padding:4px 10px; border-radius:6px; font-size:0.85rem;">Scor: 20 / 20 puncte</span>
+            </div>
+            <div style="background:#FFFFFF; padding:14px; border-radius:8px; border:1px solid #BBF7D0; font-size:0.9rem; line-height:1.65;">
+              <p style="margin-bottom:8px;"><strong>1. Infixarea / Diminutivul (Ancorare după C<sub>1</sub>):</strong></p>
+              <ul style="padding-left:18px; margin-bottom:10px;">
+                <li>Diminutivul în Agta se formează prin <span class="good-spot">C<sub>1</sub> + -ala- + Rădăcină</span> (<em>wer → walawer</em>, <em>pirak → palapirak</em>).</li>
+                <li><strong>Regulă fonologică (inițială vocalică):</strong> Dacă rădăcina începe cu vocala <code>a-</code> (C<sub>1</sub> = ∅), se prefixează <span class="good-spot">ala- + ʔ + Rădăcină</span> (<em>assaŋ → alaʔassaŋ</em>).</li>
+              </ul>
+              <p style="margin-bottom:8px;"><strong>2. Distincția Reduplicare de Plural vs. Intensificare („foarte”):</strong></p>
+              <ul style="padding-left:18px; margin-bottom:10px;">
+                <li><strong>Pluralul substantivelor:</strong> <span class="good-spot">Reduplicarea primei silabe complete (C)VC-</span> (<em>tak.ki → tak-takki</em>).</li>
+                <li><strong>Intensificarea („foarte”):</strong> <span class="good-spot">Reduplicarea primelor două segmente CV- / VC-</span> (<em>adanuk → ad-adanuk</em>).</li>
+              </ul>
+              <p style="margin-bottom:4px;"><strong>3. Mutația morfofonologică în Tepehuan:</strong></p>
+              <ul style="padding-left:18px;">
+                <li>La substantivele cu <em>v-</em> inițial, după reduplicarea primei silabe <em>vV-</em>, <span class="good-spot">consoana v ajunsă în poziție intervocalică devine p (v → p / V_V)</span>: <em>voita → vo-p-oita</em>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETAPA 5: CHEAT-SHEET VIZUAL & ALOCARE TEMĂ -->
+    <section class="stage-panel hidden" id="stage-5">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge-level">Etapa 5 • Sinteză Grafică & Alocarea Temei (5–10 min)</span>
+            <h2 class="card-title" style="margin-top:6px;">📌 Cheat-Sheet Vizual: Regulile de Aur ale Morfologiei Non-Liniare</h2>
+          </div>
+          <button class="btn-action" onclick="switchMainView('homework')">🚀 Previzualizează Tema Autonomă a Elevului →</button>
+        </div>
+
+        <div class="grid-3">
+          <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:16px; border-radius:10px;">
+            <h4 style="color:var(--c-root); margin-bottom:6px;">1. Regula Silabei (Nu a Literelor!)</h4>
+            <p style="font-size:0.88rem;">În problemele cu reduplicare sau infixare, împarte întotdeauna cuvintele în silabe (VCV → V.CV, VCCV → VC.CV). Reduplicarea copiază unități prosodice (CV- sau CVC-), nu un număr arbitrar de litere.</p>
+          </div>
+          <div style="background:#FFFBEB; border:1px solid #FDE68A; padding:16px; border-radius:10px;">
+            <h4 style="color:var(--c-infix); margin-bottom:6px;">2. Testul Graniței Morfemice</h4>
+            <p style="font-size:0.88rem;">Când un prefix se întâlnește cu rădăcina sau când prima silabă se dublează, verifică granița de contact! Acolo apar asimilări nazale (<code>meN- + tulis → menulis</code>), mutații (<code>v → p</code>) sau epenteze de <code>ʔ</code>.</p>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; padding:16px; border-radius:10px;">
+            <h4 style="color:var(--c-part); margin-bottom:6px;">3. Tabelul 2D în loc de Proză</h4>
+            <p style="font-size:0.88rem;">Nu scrie fraze lungi („Eu cred că...”, „Am dedus că...”). Desenează șablonul pozițional al verbului/substantivului și pune mărcile de Persoană × Număr/Timp într-un tabel cu simbolul <strong>∅</strong> pentru formele nemarcate.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- PASUL 3 (ÎN FIȘIERUL DE PREDARE): PREVIZUALIZAREA TEMEI AUTONOME      -->
+  <!-- ===================================================================== -->
+  <section class="container hidden" id="view-homework">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <span class="badge-level" style="background:#DBEAFE; color:#1E40AF;">Previzualizare Profesor • Tema de Casă Autonomă (100 Puncte)</span>
+          <h2 class="card-title" style="margin-top:6px;">Structura în 3 Secțiuni: 1. Enunț & Corpus → 2. Cerințe → 3. Formular de Rezolvare</h2>
+        </div>
+      </div>
+      <p style="font-size:0.92rem; color:var(--text-muted);">
+        Pentru trimiterea temei către elevi, folosiți <strong>Fișierul 1 (<code>tema_elev_morfologie.html</code>)</strong> generat mai sus, care conține exclusiv interfața autonomă a elevului (cu toate tabelele de corpus incluse în enunț, cerințele separate și autoverificare pe 100 de puncte).
+      </p>
+    </div>
+  </section>
+
+  <script>
+    function switchMainView(view) {
+      const teachView = document.getElementById('view-teaching');
+      const hwView = document.getElementById('view-homework');
+      const btnTeach = document.getElementById('btn-view-teach');
+      const btnHw = document.getElementById('btn-view-hw');
+
+      if (view === 'teaching') {
+        teachView.classList.remove('hidden');
+        hwView.classList.add('hidden');
+        btnTeach.classList.add('active');
+        btnHw.classList.remove('active');
+      } else {
+        teachView.classList.add('hidden');
+        hwView.classList.remove('hidden');
+        btnTeach.classList.remove('active');
+        btnHw.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    let isTeacherMode = true;
+    function togglePedagogicalMode() {
+      isTeacherMode = !isTeacherMode;
+      const btn = document.getElementById('btn-mode-toggle');
+      if (isTeacherMode) {
+        document.body.classList.remove('is-student');
+        btn.classList.remove('student-mode');
+        btn.innerHTML = '🎓 Mod Profesor: ACTIV';
+      } else {
+        document.body.classList.add('is-student');
+        btn.classList.add('student-mode');
+        btn.innerHTML = '🧑‍🎓 Mod Elev: ACTIV';
+      }
+    }
+
+    function showStage(stageNum) {
+      for (let i = 1; i <= 5; i++) {
+        const panel = document.getElementById('stage-' + i);
+        if (panel) panel.classList.toggle('hidden', i !== stageNum);
+      }
+      document.querySelectorAll('.stage-tab').forEach((tab, idx) => {
+        tab.classList.toggle('active', idx + 1 === stageNum);
+      });
+    }
+
+    function toggleElement(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    let timerSeconds = 240;
+    let timerInterval = null;
+    function updateTimerDisplay() {
+      const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const s = String(timerSeconds % 60).padStart(2, '0');
+      const el = document.getElementById('warmup-timer');
+      el.textContent = `${m}:${s}`;
+      el.style.color = timerSeconds <= 30 ? '#F87171' : '#38BDF8';
+    }
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) { timerSeconds--; updateTimerDisplay(); }
+        else { clearInterval(timerInterval); timerInterval = null; }
+      }, 1000);
+    }
+    function pauseTimer() { clearInterval(timerInterval); timerInterval = null; }
+    function resetTimer() { pauseTimer(); timerSeconds = 240; updateTimerDisplay(); }
+
+    function toggleWarmupReveal() {
+      document.querySelectorAll('.warmup-reveal').forEach(el => el.classList.toggle('hidden'));
+      document.querySelectorAll('.warmup-placeholder').forEach(el => el.classList.toggle('hidden'));
+    }
+
+    const swahiliData = [
+      { id: 1, raw: 'Ninasema.', s: 'Ni', t: 'na', o: '', v: 'sema', tr: 'Eu vorbesc.' },
+      { id: 2, raw: 'Wunasema.', s: 'Wu', t: 'na', o: '', v: 'sema', tr: 'Tu vorbești.' },
+      { id: 3, raw: 'Anasema.',  s: 'A',  t: 'na', o: '', v: 'sema', tr: 'Ea vorbește.' },
+      { id: 4, raw: 'Wanasema.', s: 'Wa', t: 'na', o: '', v: 'sema', tr: 'Ei vorbesc.' },
+      { id: 5, raw: 'Ninaona.',  s: 'Ni', t: 'na', o: '', v: 'ona',  tr: 'Eu văd.' },
+      { id: 6, raw: 'Niliona.',  s: 'Ni', t: 'li', o: '', v: 'ona',  tr: 'Eu am văzut.' },
+      { id: 7, raw: 'Ninawaona.',s: 'Ni', t: 'na', o: 'wa', v: 'ona', tr: 'Eu îi văd.' },
+      { id: 8, raw: 'Niliwuona.',s: 'Ni', t: 'li', o: 'wu', v: 'ona', tr: 'Eu te-am văzut.' },
+      { id: 9, raw: 'Ananiona.', s: 'A',  t: 'na', o: 'ni', v: 'ona', tr: 'Ea mă vede.' },
+      { id: 10, raw: 'Wutakaniona.', s: 'Wu', t: 'taka', o: 'ni', v: 'ona', tr: 'Tu mă vei vedea.' }
+    ];
+
+    const swahiliStepDescriptions = [
+      '<strong>Pasul 0 (Punct de plecare):</strong> Priviți corpusul brut. Comparați propozițiile 1–4 („vorbesc”) cu 5–10 („văd”).',
+      '<strong>Pasul 1 (Descoperirea Rădăcinii Verbale):</strong> Toate enunțurile cu „a vorbi” se termină în <span class="m-root">-sema</span>, iar cele cu „a vedea” în <span class="m-root">-ona</span>.',
+      '<strong>Pasul 2 (Descoperirea Subiectului):</strong> Izolăm primul prefix: <span class="m-pref">Ni-</span> (eu), <span class="m-pref">Wu-</span> (tu), <span class="m-pref">A-</span> (ea), <span class="m-pref">Wa-</span> (ei).',
+      '<strong>Pasul 3 (Descoperirea Timpului):</strong> Izolăm al doilea slot: <span class="m-infix">-na-</span> (prezent), <span class="m-infix">-li-</span> (trecut), <span class="m-infix">-taka-</span> (viitor).',
+      '<strong>Pasul 4 (Descoperirea Obiectului Direct & Formula Completă):</strong> Între Timp și Rădăcină apare Obiectul Direct (<span class="m-suff">-ni-</span> = mă, <span class="m-suff">-wu-</span> = te, <span class="m-suff">-wa-</span> = îi).'
+    ];
+
+    const swahiliFormulaByStep = [
+      '<span style="color:#64748B;">[ ? ] + [ ? ] + [ ? ] + [ ? ] &nbsp;(Click pe Pasul 1)</span>',
+      '[ ? ] + <span class="m-root">Rădăcină Verbală (-V)</span>',
+      '<span class="m-pref">Subiect (S-)</span> + [ ? ] + <span class="m-root">Rădăcină Verbală (-V)</span>',
+      '<span class="m-pref">Subiect (S-)</span> + <span class="m-infix">Timp (-T-)</span> + [ ? ] + <span class="m-root">Rădăcină (-V)</span>',
+      '<span class="m-pref">Subiect (S-)</span> + <span class="m-infix">Timp (-T-)</span> + <span class="m-suff">(Obiect -O-)</span> + <span class="m-root">Rădăcină (-V)</span>'
+    ];
+
+    const swahiliMorphemesByStep = [
+      '<p style="color:#64748B; font-style:italic;">Niciun morfem izolat încă.</p>',
+      '<p>• <strong>Rădăcini verbale:</strong> <span class="m-root">-sema</span> = a vorbi, <span class="m-root">-ona</span> = a vedea.</p>',
+      '<p>• <strong>Rădăcini:</strong> <span class="m-root">-sema</span>, <span class="m-root">-ona</span><br/>• <strong>Subiect (S-):</strong> 1sg = <span class="m-pref">ni-</span>, 2sg = <span class="m-pref">wu-</span>, 3sg = <span class="m-pref">a-</span>, 3pl = <span class="m-pref">wa-</span>.</p>',
+      '<p>• <strong>Rădăcini:</strong> <span class="m-root">-sema</span>, <span class="m-root">-ona</span><br/>• <strong>Subiect (S-):</strong> 1sg = <span class="m-pref">ni-</span>, 2sg = <span class="m-pref">wu-</span>, 3sg = <span class="m-pref">a-</span>, 3pl = <span class="m-pref">wa-</span><br/>• <strong>Timp (-T-):</strong> prezent = <span class="m-infix">-na-</span>, trecut = <span class="m-infix">-li-</span>, viitor = <span class="m-infix">-taka-</span>.</p>',
+      '<p>• <strong>Subiect (S-) = Obiect (-O-):</strong> 1sg = <span class="m-pref">ni-</span> / <span class="m-suff">-ni-</span>, 2sg = <span class="m-pref">wu-</span> / <span class="m-suff">-wu-</span>, 3sg = <span class="m-pref">a-</span>, 3pl = <span class="m-pref">wa-</span> / <span class="m-suff">-wa-</span> (intranzitiv: <span class="m-suff">∅</span>)<br/>• <strong>Timp (-T-):</strong> prezent = <span class="m-infix">-na-</span>, trecut = <span class="m-infix">-li-</span>, viitor = <span class="m-infix">-taka-</span>.</p>'
+    ];
+
+    function setSwahiliStep(step) {
+      for (let i = 0; i <= 4; i++) {
+        document.getElementById('sw-btn-' + i).classList.toggle('active', i === step);
+      }
+      document.getElementById('sw-step-desc').innerHTML = swahiliStepDescriptions[step];
+      document.getElementById('sw-formula-dynamic').innerHTML = swahiliFormulaByStep[step];
+      document.getElementById('sw-morphemes-dynamic').innerHTML = swahiliMorphemesByStep[step];
+
+      const tbody = document.getElementById('swahili-table-body');
+      tbody.innerHTML = swahiliData.map(row => {
+        let formatted = row.raw;
+        if (step === 1) formatted = `${row.s + row.t + row.o}-<span class="m-root">${row.v}</span>`;
+        else if (step === 2) formatted = `<span class="m-pref">${row.s}</span>-${row.t + row.o}-<span class="m-root">${row.v}</span>`;
+        else if (step === 3) formatted = `<span class="m-pref">${row.s}</span>-<span class="m-infix">${row.t}</span>-${row.o ? row.o + '-' : ''}<span class="m-root">${row.v}</span>`;
+        else if (step === 4) formatted = `<span class="m-pref">${row.s}</span>-<span class="m-infix">${row.t}</span>-${row.o ? `<span class="m-suff">${row.o}</span>-` : '<span class="m-suff">∅</span>-'}<span class="m-root">${row.v}</span>`;
+        return `<tr><td>${row.id}</td><td style="font-family:Consolas,monospace; font-weight:700;">${formatted}</td><td>${row.tr}</td></tr>`;
+      }).join('');
+
+      if (step === 4) {
+        document.getElementById('sw-ans-11').innerHTML = '<span class="m-pref">A</span><span class="m-infix">li</span><span class="m-suff">wa</span><span class="m-root">ona</span>.';
+        document.getElementById('sw-ans-11').classList.add('revealed');
+        document.getElementById('sw-ans-12').innerHTML = '<span class="m-pref">Ni</span><span class="m-infix">taka</span><span class="m-suff">wu</span><span class="m-root">ona</span>.';
+        document.getElementById('sw-ans-12').classList.add('revealed');
+        document.getElementById('sw-ans-13').innerHTML = '<span class="m-pref">A</span><span class="m-infix">li</span><span class="m-suff">ni</span><span class="m-root">ona</span>.';
+        document.getElementById('sw-ans-13').classList.add('revealed');
+      } else {
+        ['11', '12', '13'].forEach(n => {
+          const el = document.getElementById('sw-ans-' + n);
+          el.innerHTML = '[ Afișează la Pasul 4 ]';
+          el.classList.remove('revealed');
+        });
+      }
+    }
+
+    function toggleSlot(el) {
+      if (el.classList.contains('revealed')) {
+        el.classList.remove('revealed');
+        el.innerHTML = '[ ? ]';
+      } else {
+        el.classList.add('revealed');
+        el.innerHTML = el.getAttribute('data-html');
+      }
+    }
+
+    function revealAllSlots(show) {
+      document.querySelectorAll('.tep-slot').forEach((el, idx) => {
+        if (show) {
+          el.classList.add('revealed');
+          el.innerHTML = el.getAttribute('data-html');
+        } else {
+          el.classList.remove('revealed');
+          el.innerHTML = `(${idx + 1}) [ ? ]`;
+        }
+      });
+    }
+
+    function toggleTepehuanClasses() {
+      document.querySelectorAll('.tep-class-col').forEach(el => el.classList.toggle('hidden'));
+    }
+
+    const aromaCorpus = [
+      { id: 1, raw: 'avamake', seg: '<span class="m-pref">a</span><span class="m-infix">va</span><span class="m-root">make</span>', tr: 'Eu tocmai am făcut să învârtă.' },
+      { id: 2, raw: 'aripa', seg: '<span class="m-pref">a</span><span class="m-root">ripa</span>', tr: 'Eu tocmai am știut.' },
+      { id: 3, raw: 'enevariparia', seg: '<span class="m-pref">ene</span><span class="m-infix">va</span><span class="m-root">ripa</span><span class="m-suff">ria</span>', tr: 'El urmează să îi învețe.' },
+      { id: 4, raw: 'evaripaku', seg: '<span class="m-pref">e</span><span class="m-infix">va</span><span class="m-root">ripa</span><span class="m-suff">ku</span>', tr: 'El tocmai m-a învățat.' },
+      { id: 5, raw: 'govaripatha', seg: '<span class="m-pref">go</span><span class="m-infix">va</span><span class="m-root">ripa</span><span class="m-suff">tha</span>', tr: 'Voi tocmai l-ați învățat.' },
+      { id: 6, raw: 'igavaveripa', seg: '<span class="m-pref">iga</span><span class="m-infix">va</span><span class="m-infix">ve</span><span class="m-root">ripa</span>', tr: 'Noi urmează să ne învățăm.' },
+      { id: 7, raw: 'maigomakewaiku', seg: '<span class="m-part">ma</span><span class="m-pref">igo</span><span class="m-root">make</span><span class="m-part">wai</span><span class="m-suff">ku</span>', tr: 'Voi urmează să mă tot învârtiți.' },
+      { id: 8, raw: 'maigavaripawaimu', seg: '<span class="m-part">ma</span><span class="m-pref">iga</span><span class="m-infix">va</span><span class="m-root">ripa</span><span class="m-part">wai</span><span class="m-suff">mu</span>', tr: 'Noi urmează să te tot învățăm.' },
+      { id: 9, raw: 'mapigeripawai', seg: '<span class="m-part">ma</span><span class="m-pref">pige</span><span class="m-root">ripa</span><span class="m-part">wai</span>', tr: 'Ei vor tot ști.' },
+      { id: 10, raw: 'maporipawaia', seg: '<span class="m-part">ma</span><span class="m-pref">po</span><span class="m-root">ripa</span><span class="m-part">wai</span><span class="m-suff">a</span>', tr: 'Tu l-ai tot știut.' },
+      { id: 11, raw: 'onomakea', seg: '<span class="m-pref">ono</span><span class="m-root">make</span><span class="m-suff">a</span>', tr: 'Tu urmează să îl învârți.' },
+      { id: 12, raw: 'pavemake', seg: '<span class="m-pref">pa</span><span class="m-infix">ve</span><span class="m-root">make</span>', tr: 'Eu m-am învârtit.' },
+      { id: 13, raw: 'pegeveripa', seg: '<span class="m-pref">pege</span><span class="m-infix">ve</span><span class="m-root">ripa</span>', tr: 'Ei s-au știut.' },
+      { id: 14, raw: 'pigavaripatha', seg: '<span class="m-pref">piga</span><span class="m-infix">va</span><span class="m-root">ripa</span><span class="m-suff">tha</span>', tr: 'Noi îl vom învăța.' },
+      { id: 15, raw: 'pigovamakeria', seg: '<span class="m-pref">pigo</span><span class="m-infix">va</span><span class="m-root">make</span><span class="m-suff">ria</span>', tr: 'Voi îi veți face să învârtă.' },
+      { id: 16, raw: 'ponoveripa', seg: '<span class="m-pref">pono</span><span class="m-infix">ve</span><span class="m-root">ripa</span>', tr: 'Tu te vei ști.' }
+    ];
+
+    let aromaSegmented = false;
+    function renderAromaCorpus() {
+      document.getElementById('aroma-corpus-left').innerHTML = aromaCorpus.slice(0, 8).map(r =>
+        `<tr><td>${r.id}.</td><td style="font-family:Consolas,monospace; font-weight:700;">${aromaSegmented ? r.seg : r.raw}</td><td>${r.tr}</td></tr>`
+      ).join('');
+      document.getElementById('aroma-corpus-right').innerHTML = aromaCorpus.slice(8, 16).map(r =>
+        `<tr><td>${r.id}.</td><td style="font-family:Consolas,monospace; font-weight:700;">${aromaSegmented ? r.seg : r.raw}</td><td>${r.tr}</td></tr>`
+      ).join('');
+    }
+
+    function toggleAromaSegmentation() {
+      aromaSegmented = !aromaSegmented;
+      renderAromaCorpus();
+      document.getElementById('btn-aroma-seg').textContent = aromaSegmented
+        ? '🔒 Revenire la Corpusul Brut (1–16)'
+        : '🎨 Pasul 1: Segmentează Cromatic Corpusul (1–16)';
+    }
+
+    function inspectAromaTS(tsCode, persLabel, tenseLabel) {
+      document.querySelectorAll('.matrix-cell').forEach(c => {
+        c.classList.toggle('selected', c.textContent.trim() === tsCode);
+      });
+      const isPluralSubj = ['iga', 'piga', 'ga', 'paga', 'igo', 'pigo', 'go', 'pogo', 'ige', 'pige', 'ge', 'pege'].includes(tsCode);
+      const obj3sg = isPluralSubj ? 'tha' : 'a';
+      document.getElementById('aroma-inspector').innerHTML = `
+        <div><strong>Marcator TS selectat:</strong> <span class="m-pref">${tsCode}-</span> (${persLabel} • ${tenseLabel})</div>
+        <div style="margin-top:6px;">
+          • <strong>Cu obiect 3sg („îl/o”):</strong> <span class="m-pref">${tsCode}</span><span class="m-root">make</span><span class="m-suff">${obj3sg}</span> (obiect <code>-${obj3sg}</code> pentru subiect ${isPluralSubj ? 'plural' : 'singular'})<br/>
+          • <strong>Cauzativ („a învăța” = va + ripa):</strong> <span class="m-pref">${tsCode}</span><span class="m-infix">va</span><span class="m-root">ripa</span><span class="m-suff">ria</span>
+        </div>
+      `;
+    }
+
+    const auditExplanations = {
+      1: '❌ <strong>Greșeala 1 (Dicționar în loc de reguli — pierdere 4 p.):</strong> Rădăcinile invariabile (pirak, takki, bag) NU trebuie listate în explicație. Punctele se acordă pentru reguli!',
+      2: '❌ <strong>Greșeala 2 (Numărarea literelor — pierdere 5 p.):</strong> Regula corectă este <code>C<sub>1</sub> + -ala- + Cuvânt</code>, iar la inițială vocalică <code>a-</code> se atașează <code>ala- + ʔ + Cuvânt</code>.',
+      3: '❌ <strong>Greșeala 3 (Confuzie între silabă și număr de litere — pierdere 4 p.):</strong> La plural se reduplică <strong>prima silabă completă</strong> (<em>tak-takki</em>), pe când la „foarte” se reduplică <strong>primele două sunete</strong> (<em>ad-adanuk</em>).',
+      4: '❌ <strong>Greșeala 4 (Ignorarea mutației fonologice — pierdere 4 p.):</strong> Este reduplicarea primei silabe urmată de transformarea consoanei <code>v → p</code> între două vocale.'
+    };
+
+    function showAuditFeedback(id) {
+      document.getElementById('audit-feedback-box').innerHTML = auditExplanations[id];
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setSwahiliStep(0);
+      renderAromaCorpus();
+    });
+  </script>
+</body>
+</html>

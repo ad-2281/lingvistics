@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Temă: Analiza Morfologică</title>
+  <style>
+    .hw-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .question-block {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .char-keyboard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 8px;
+    }
+    .char-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      font-size: 0.95rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .char-btn:hover {
+      background: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <div id="homework-root" class="hw-container">
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold text-slate-800">Temă: Analiză Morfologică și Sisteme de Scriere</h2>
+      <p class="text-sm text-slate-600">Completați câmpurile de mai jos. Trimiterea va fi notată automat pe server.</p>
+    </div>
+
+    <!-- Virtual Character Helper Keyboard -->
+    <div class="char-keyboard" id="armenian-kb">
+      <span class="text-xs font-semibold text-slate-500 self-center mr-2">Caractere speciale:</span>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('Ռ')">Ռ</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('ա')">ա</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('լ')">լ</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('ու')">ու</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('կ')">կ</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('ă')">ă</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('ș')">ș</button>
+      <button type="button" class="char-btn" onclick="insertSpecialChar('ț')">ț</button>
+    </div>
+
+    <!-- Question 1: exact_normalized -->
+    <div class="question-block">
+      <label class="block font-semibold text-slate-800 mb-1" for="q1_traducere_1">
+        Cerința 1 (20 puncte): Traducere în limba turcă
+      </label>
+      <p class="text-sm text-slate-600 mb-2">Traduceți sintagma <em>„treizeci de insule”</em> în limba turcă (știind că <code>otuz</code> = 30):</p>
+      <input type="text"
+             name="q1_traducere_1"
+             id="q1_traducere_1"
+             class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Introduceți răspunsul..."
+             onfocus="setActiveHwInput(this)">
+    </div>
+
+    <!-- Question 2: levenshtein_tolerance -->
+    <div class="question-block">
+      <label class="block font-semibold text-slate-800 mb-1" for="q1_transcriere_armeana">
+        Cerința 2 (20 puncte): Transcriere în alfabetul armean
+      </label>
+      <p class="text-sm text-slate-600 mb-2">Scrieți numele <em>„Raluca”</em> folosind caracterele armenești puse la dispoziție în bara de sus:</p>
+      <input type="text"
+             name="q1_transcriere_armeana"
+             id="q1_transcriere_armeana"
+             class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Scrieți folosind tastele de mai sus..."
+             onfocus="setActiveHwInput(this)">
+    </div>
+
+    <!-- Question 3: regex -->
+    <div class="question-block">
+      <label class="block font-semibold text-slate-800 mb-1" for="q1_spectrograma">
+        Cerința 3 (20 puncte): Fonetică acustică
+      </label>
+      <p class="text-sm text-slate-600 mb-2">Identificați cuvântul românesc din forma fonetică [at͡ʃe] sau [at͡se]:</p>
+      <input type="text"
+             name="q1_spectrograma"
+             id="q1_spectrograma"
+             class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Ex: ace sau ațe..."
+             onfocus="setActiveHwInput(this)">
+    </div>
+
+    <!-- Question 4: keyword_rubric -->
+    <div class="question-block">
+      <label class="block font-semibold text-slate-800 mb-1" for="q1_explicatie">
+        Cerința 4 (40 puncte): Argumentare morfologică
+      </label>
+      <p class="text-sm text-slate-600 mb-2">
+        Explicați de ce substantivul determinat de un numeral nu primește marca de plural <code>-lar</code> în limba turcă:
+      </p>
+      <textarea name="q1_explicatie"
+                id="q1_explicatie"
+                rows="4"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="Argumentați folosind terminologia morfologică..."
+                onfocus="setActiveHwInput(this)"></textarea>
+    </div>
+  </div>
+
+  <script>
+    let activeInput = null;
+    function setActiveHwInput(el) {
+      activeInput = el;
+    }
+    function insertSpecialChar(char) {
+      if (!activeInput) {
+        activeInput = document.getElementById("q1_transcriere_armeana");
+      }
+      if (activeInput) {
+        const start = activeInput.selectionStart || activeInput.value.length;
+        const end = activeInput.selectionEnd || activeInput.value.length;
+        const val = activeInput.value;
+        activeInput.value = val.substring(0, start) + char + val.substring(end);
+        activeInput.selectionStart = activeInput.selectionEnd = start + char.length;
+        activeInput.focus();
+      }
+    }
+  </script>
+</body>
+</html>
