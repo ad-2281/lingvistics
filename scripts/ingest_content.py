@@ -118,14 +118,119 @@ def sanitize_lesson_html(raw_html: str):
     return student_html, scoped_css, scoped_js, teacher_notes_html, title
 
 
-def sanitize_homework_html(raw_html: str, expected_fields=None):
+SELF_CONTAINED_GRADING_MARKERS = [
+    "homeworkKey",
+    "gradeHomework",
+    "checkHomework",
+    "checkAnswers",
+    "autoGrade",
+]
+
+# Platform shim injected into self-contained exercises.
+# It wraps gradeHomework() with server-side attempt-limit enforcement.
+# The platform runtime replaces the placeholders before serving the page:
+#   {{ALLOW_RETAKES}}       → "true" or "false"
+#   {{REVEAL_ON_EXHAUSTED}} → "true" or "false"
+#   {{ATTEMPTS_USED}}       → integer (current attempt count for this student)
+#   {{MAX_ATTEMPTS}}        → integer
+PLATFORM_SHIM_JS = """
+/* ── Platform Attempt-Control Shim ─────────────────────────────────────
+   Injected by ingest_content.py. Do NOT edit manually.
+   Runtime values are substituted by the backend before page delivery.
+   ──────────────────────────────────────────────────────────────────── */
+(function () {
+  var _allowRetakes      = {{ALLOW_RETAKES}};
+  var _revealOnExhausted = {{REVEAL_ON_EXHAUSTED}};
+  var _attemptsUsed      = {{ATTEMPTS_USED}};
+  var _maxAttempts       = {{MAX_ATTEMPTS}};
+
+  /* Freeze the original author-supplied grading function. */
+  var _originalGrade = window.gradeHomework;
+
+  window.gradeHomework = function () {
+    if (_attemptsUsed >= _maxAttempts) {
+      /* No more attempts allowed. */
+      if (_revealOnExhausted) {
+        /* Call the original so solutions are shown, then lock inputs. */
+        if (_originalGrade) _originalGrade();
+      }
+      _lockInputs();
+      _hideSubmitButton();
+      _showAttemptExhaustedBanner(_revealOnExhausted);
+      return;
+    }
+
+    /* Attempt is valid — run original grading, then register with server. */
+    if (_originalGrade) _originalGrade();
+    _attemptsUsed += 1;
+
+    /* Persist attempt to platform (non-blocking). */
+    if (window.__platformRecordAttempt) {
+      window.__platformRecordAttempt(_attemptsUsed);
+    }
+
+    if (!_allowRetakes || _attemptsUsed >= _maxAttempts) {
+      _lockInputs();
+      _hideSubmitButton();
+      if (_attemptsUsed >= _maxAttempts && !_revealOnExhausted) {
+        _hideRubric();
+      }
+    }
+  };
+
+  function _lockInputs() {
+    document.querySelectorAll('input.hw-input, select, textarea').forEach(function (el) {
+      el.disabled = true;
+    });
+  }
+
+  function _hideSubmitButton() {
+    /* Hide any button that calls gradeHomework. */
+    document.querySelectorAll('button[onclick*="gradeHomework"], button[onclick*="checkHomework"]')
+      .forEach(function (btn) { btn.style.display = 'none'; });
+  }
+
+  function _hideRubric() {
+    var box = document.getElementById('official-rubric-box');
+    if (box) box.classList.add('hidden');
+  }
+
+  function _showAttemptExhaustedBanner(solutionsShown) {
+    var msg = solutionsShown
+      ? '⛔ Ai epuizat toate încercările. Soluțiile sunt afișate mai jos.'
+      : '⛔ Ai epuizat toate încercările. Soluțiile nu sunt disponibile pentru această temă.';
+    var banner = document.createElement('div');
+    banner.style.cssText = 'background:#FEF2F2;border-left:5px solid #DC2626;color:#991B1B;'
+      + 'padding:14px 18px;border-radius:8px;margin:16px 0;font-weight:700;font-size:0.95rem;';
+    banner.textContent = msg;
+    var main = document.querySelector('main') || document.body;
+    main.prepend(banner);
+  }
+})();
+/* ── End Platform Shim ───────────────────────────────────────────────── */
+"""
+
+
+def detect_self_contained_grading(raw_html: str) -> bool:
+    """Return True if the HTML contains a self-contained JS grading system."""
+    for marker in SELF_CONTAINED_GRADING_MARKERS:
+        if marker in raw_html:
+            return True
+    return False
+
+
+def sanitize_homework_html(raw_html: str, expected_fields=None, grading_mode: str = "server_side"):
     """
-    Parses homework HTML, removes any client-side solutions or answers,
-    extracts scoped CSS/JS, and verifies form controls.
+    Parses homework HTML, extracts scoped CSS/JS, and verifies form controls.
+
+    grading_mode:
+      "server_side"          — strips client-side answer keys; server evaluates fields.
+      "client_self_contained"— preserves the full JS grading logic intact and injects
+                               the platform attempt-control shim around gradeHomework().
     """
     soup = BeautifulSoup(raw_html, "lxml")
 
-    # Remove any teacher notes or barem
+    # Remove any teacher notes / UI controls (applies to all modes)
     for selector in TEACHER_SELECTORS + TEACHER_UI_SELECTORS:
         for elem in soup.select(selector):
             elem.decompose()
@@ -138,7 +243,7 @@ def sanitize_homework_html(raw_html: str, expected_fields=None):
         style_tag.decompose()
     scoped_css = "\n\n".join(styles).strip()
 
-    # Extract Scoped Scripts - STRIP client-side answer verification or auto-grading
+    # Extract Scoped Scripts
     scripts = []
     for script_tag in soup.find_all("script"):
         src = script_tag.get("src")
@@ -147,29 +252,39 @@ def sanitize_homework_html(raw_html: str, expected_fields=None):
             continue
         if script_tag.string:
             content = script_tag.string
-            # Check if this script contains solution checking arrays or answers
-            # Replace checkHomework / checkAnswers / autoGrade functions with client-side delegates
-            if re.search(r'(barem|solution|correctAnswers|ansMap|answerKey|checkHomework)', content, re.IGNORECASE):
-                # Filter out the grading arrays to avoid DevTools leaks
-                sanitized_content = re.sub(
-                    r'(const|var|let)\s+(correctAnswers|answers|barem|solutions|baremMap)\s*=[\s\S]*?;',
-                    '/* Answer key stripped for server-side evaluation */',
-                    content
-                )
-                scripts.append(sanitized_content.strip())
-            else:
+
+            if grading_mode == "client_self_contained":
+                # Preserve the full JS grading logic unchanged.
                 scripts.append(content.strip())
+            else:
+                # server_side: strip answer keys to prevent DevTools leaks.
+                if re.search(r'(barem|solution|correctAnswers|ansMap|answerKey|checkHomework|homeworkKey)', content, re.IGNORECASE):
+                    sanitized_content = re.sub(
+                        r'(const|var|let)\s+(correctAnswers|answers|barem|solutions|baremMap|homeworkKey)\s*=[\s\S]*?;',
+                        '/* Answer key stripped for server-side evaluation */',
+                        content
+                    )
+                    scripts.append(sanitized_content.strip())
+                else:
+                    scripts.append(content.strip())
         script_tag.decompose()
+
+    if grading_mode == "client_self_contained":
+        # Append the platform attempt-control shim AFTER the author's script.
+        scripts.append(PLATFORM_SHIM_JS.strip())
+
     scoped_js = "\n\n".join(scripts).strip()
 
-    # Verify form inputs
+    # Verify form inputs (informational in self-contained mode)
     found_keys = set()
     for tag in soup.find_all(["input", "select", "textarea"]):
         key = tag.get("name") or tag.get("data-question-key") or tag.get("id")
         if key:
             found_keys.add(key)
 
-    if expected_fields:
+    if grading_mode == "client_self_contained":
+        print(f"  [INFO] Self-contained grading mode: {len(found_keys)} form field(s) detected (no server fields config required).")
+    elif expected_fields:
         missing = set(expected_fields) - found_keys
         if missing:
             print(f"  [WARN] Form controls missing for expected grading fields: {list(missing)}")
@@ -303,14 +418,19 @@ def process_lesson(lesson_dir: Path, module_id: str, module_slug: str, supabase_
     # Process Exercises
     exercises_list = rules_data.get("exercises", [])
 
-    # If homework.html exists but no exercises defined, provide a default definition
+    # If homework.html exists but no exercises defined, auto-detect grading mode
     if homework_html_file.exists() and not exercises_list:
+        with open(homework_html_file, "r", encoding="utf-8") as _f:
+            _hw_content = _f.read()
+        _auto_mode = "client_self_contained" if detect_self_contained_grading(_hw_content) else "server_side"
         exercises_list.append({
             "slug": f"{lesson_slug}-tema",
             "title": f"Temă: {lesson_title}",
             "category": "homework",
             "source_file": "homework.html",
+            "grading_mode": _auto_mode,
             "allow_retakes": False,
+            "reveal_on_exhausted": True,
             "max_attempts": 1,
             "max_score": 100.0,
             "fields": {}
@@ -326,25 +446,44 @@ def process_lesson(lesson_dir: Path, module_id: str, module_slug: str, supabase_
         with open(source_path, "r", encoding="utf-8") as f:
             raw_ex_html = f.read()
 
-        expected_fields = list(ex.get("fields", {}).keys())
-        prompt_html, ex_css, ex_js, _ = sanitize_homework_html(raw_ex_html, expected_fields)
+        # Resolve grading mode: explicit config wins; fall back to auto-detection
+        grading_mode = ex.get("grading_mode")
+        if not grading_mode:
+            grading_mode = "client_self_contained" if detect_self_contained_grading(raw_ex_html) else "server_side"
+
+        expected_fields = list(ex.get("fields", {}).keys()) if grading_mode == "server_side" else None
+        prompt_html, ex_css, ex_js, found_keys = sanitize_homework_html(
+            raw_ex_html, expected_fields, grading_mode=grading_mode
+        )
 
         ex_slug = ex.get("slug", f"{lesson_slug}-{ex.get('category', 'homework')}")
         ex_title = ex.get("title", "Exercițiu")
         ex_category = ex.get("category", "homework")
         allow_retakes = ex.get("allow_retakes", False)
+        reveal_on_exhausted = ex.get("reveal_on_exhausted", True)
         max_attempts = ex.get("max_attempts", 1)
         max_score = ex.get("max_score", 100.0)
         ex_order = ex.get("order_index", 1)
         ex_published = ex.get("is_published", True)
 
-        grading_rules = {
-            "fields": ex.get("fields", {}),
-            "solution_explanation_html": ex.get("solution_explanation_html", "")
-        }
-
-        print(f"    - Exercise: {ex_title} ({ex_slug}) [{ex_category}]")
-        print(f"      Fields configured: {len(grading_rules['fields'])}, Retakes: {allow_retakes} (max {max_attempts})")
+        if grading_mode == "client_self_contained":
+            grading_rules = {
+                "grading_mode": "client_self_contained",
+                "allow_retakes": allow_retakes,
+                "reveal_on_exhausted": reveal_on_exhausted,
+                "max_attempts": max_attempts,
+                "field_count": len(found_keys),
+            }
+            print(f"    - Exercise: {ex_title} ({ex_slug}) [{ex_category}] [client_self_contained]")
+            print(f"      Form fields detected: {len(found_keys)}, Retakes: {allow_retakes} (max {max_attempts}), Reveal on exhausted: {reveal_on_exhausted}")
+        else:
+            grading_rules = {
+                "grading_mode": "server_side",
+                "fields": ex.get("fields", {}),
+                "solution_explanation_html": ex.get("solution_explanation_html", "")
+            }
+            print(f"    - Exercise: {ex_title} ({ex_slug}) [{ex_category}] [server_side]")
+            print(f"      Fields configured: {len(grading_rules['fields'])}, Retakes: {allow_retakes} (max {max_attempts})")
 
         if not dry_run and supabase_client and lesson_id:
             ex_res = supabase_client.table("exercises").upsert({
@@ -384,13 +523,6 @@ def main():
     parser.add_argument("--allow-missing", action="store_true", help="Exit 0 instead of failing if content-dir does not exist")
     args = parser.parse_args()
 
-    if not content_dir.exists():
-        if args.allow_missing:
-            print(f"Notice: Content directory not present ({content_dir}); skipping ingestion.")
-            sys.exit(0)
-        print(f"Error: Content directory does not exist: {content_dir}")
-        sys.exit(1)
-
     # Load environment variables
     load_dotenv()
 
@@ -402,6 +534,9 @@ def main():
         content_dir = repo_root / "input_content"
 
     if not content_dir.exists():
+        if args.allow_missing:
+            print(f"Notice: Content directory not present ({content_dir}); skipping ingestion.")
+            sys.exit(0)
         print(f"Error: Content directory does not exist: {content_dir}")
         sys.exit(1)
 

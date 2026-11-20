@@ -2,6 +2,7 @@
 .env
 .env.local
 input_content/
+input_raw_lessons/
 
 # Python
 __pycache__/
