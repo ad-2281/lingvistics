@@ -4,14 +4,29 @@
 -- ==============================================================================
 
 -- 1. EXTENSIONS
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
-CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+DO $$
+BEGIN
+  CREATE EXTENSION IF NOT EXISTS pgcrypto;
+EXCEPTION
+  WHEN OTHERS THEN null;
+END $$;
+
+DO $$
+BEGIN
+  CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+EXCEPTION
+  WHEN OTHERS THEN null;
+END $$;
 
 -- Ensure extensions schema is in search_path if installed there by default
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'extensions') THEN
-    ALTER DATABASE postgres SET search_path TO public, extensions;
+    BEGIN
+      ALTER DATABASE postgres SET search_path TO public, extensions;
+    EXCEPTION
+      WHEN OTHERS THEN null;
+    END;
   END IF;
 END $$;
 
@@ -223,10 +238,16 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+DO $$
+BEGIN
+  DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+  CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'Trigger on auth.users could not be updated: %', SQLERRM;
+END $$;
 
 -- 5.2 Protect Profile Columns Trigger on public.profiles
 CREATE OR REPLACE FUNCTION public.check_profile_update()
