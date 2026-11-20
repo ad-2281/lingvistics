@@ -381,7 +381,15 @@ def main():
     parser = argparse.ArgumentParser(description="Ingest modular course HTML content to Supabase.")
     parser.add_argument("--content-dir", default=None, help="Path to input_content directory")
     parser.add_argument("--dry-run", action="store_true", help="Parse and validate without updating Supabase")
+    parser.add_argument("--allow-missing", action="store_true", help="Exit 0 instead of failing if content-dir does not exist")
     args = parser.parse_args()
+
+    if not content_dir.exists():
+        if args.allow_missing:
+            print(f"Notice: Content directory not present ({content_dir}); skipping ingestion.")
+            sys.exit(0)
+        print(f"Error: Content directory does not exist: {content_dir}")
+        sys.exit(1)
 
     # Load environment variables
     load_dotenv()

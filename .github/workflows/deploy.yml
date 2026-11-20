@@ -5,6 +5,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      run_ingestion:
+        description: 'Run HTML content ingestion to Supabase (requires input_content/ in repo)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -17,7 +23,7 @@ concurrency:
 
 jobs:
   backend_and_content_sync:
-    name: Database Migrations & Ingest Content
+    name: Database Migrations & Optional Content Sync
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -39,23 +45,44 @@ jobs:
             echo "SUPABASE_DB_URL secret not provided; skipping direct CLI migration push."
           fi
 
+      - name: Determine Whether to Run Ingestion
+        id: check_ingestion
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "${{ github.event.inputs.run_ingestion }}" = "true" ]; then
+              echo "should_ingest=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "should_ingest=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            # On push to main: run automatically only if input_content/ exists in the repo and contains modules
+            if [ -d "input_content" ] && [ -n "$(find input_content -name 'module_meta.json' -print -quit)" ]; then
+              echo "should_ingest=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "should_ingest=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
       - name: Set up Python 3.11
+        if: steps.check_ingestion.outputs.should_ingest == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
 
       - name: Install Python Dependencies
+        if: steps.check_ingestion.outputs.should_ingest == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r scripts/requirements.txt
 
       - name: Run HTML Ingestion Pipeline
+        if: steps.check_ingestion.outputs.should_ingest == 'true'
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          python scripts/ingest_content.py
+          python scripts/ingest_content.py --allow-missing
 
   deploy_frontend:
     name: Deploy Frontend to GitHub Pages
